@@ -94,8 +94,6 @@ if __name__ == '__main__':
     sls = sparse_matrix(weights_, edges_, matrix_dim)
 
     result_ranks = pagerank_power(sls)
-    sum_res = sum(result_ranks)
-    print("sum_res -- ", sum_res)
     print("Result ranks of sites -- ", result_ranks)
 
     with open("all_links.json", "r", encoding="utf-8") as f:
