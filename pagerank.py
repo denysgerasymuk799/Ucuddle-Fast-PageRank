@@ -1,5 +1,9 @@
+import json
+
 import numpy as np
 import scipy.sparse as sparse
+
+from elasticsearch_interaction import create_sites_matrix
 
 ROWS = 1
 ROW_FORM = -1
@@ -81,9 +85,28 @@ def pagerank_power(a, prob=STANDARD_RW_PROB, max_iter=MAX_ITER_NUM, tol=DELIMITE
 
 
 if __name__ == '__main__':
-    matrix_dim = 5
-    edges_ = np.array([[0, 1], [1, 2], [2, 1], [2, 3], [2, 4], [3, 0], [3, 2], [4, 0], [4, 2], [4, 3]])
-    weights_ = [0.4923, 0.0999, 0.2132, 0.0178, 0.5694, 0.0406, 0.2047, 0.8610, 0.3849, 0.4829]
+    edges_, matrix_dim = create_sites_matrix()
+    print("edges created")
+
+    len_edges = len(edges_)
+    weights_ = [1 / len_edges for _ in range(len_edges)]
 
     sls = sparse_matrix(weights_, edges_, matrix_dim)
-    print(pagerank_power(sls))
+
+    result_ranks = pagerank_power(sls)
+    sum_res = sum(result_ranks)
+    print("sum_res -- ", sum_res)
+    print("Result ranks of sites -- ", result_ranks)
+
+    with open("all_links.json", "r", encoding="utf-8") as f:
+        links_dict = json.load(f)
+
+    result_dict = dict()
+    for n_domain, domain in enumerate(links_dict):
+        # print(result_ranks[n_domain], "  --  ", domain)
+        result_dict[domain] = result_ranks[n_domain]
+
+    result_dict = {k: v for k, v in sorted(result_dict.items(), key=lambda item: item[1], reverse=True)}
+
+    with open("result_domain_ranks.json", "w", encoding="utf-8") as f:
+        json.dump(result_dict, f, indent=4, ensure_ascii=False)
