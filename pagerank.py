@@ -96,7 +96,7 @@ if __name__ == '__main__':
     result_ranks = pagerank_power(sls)
     print("Result ranks of sites -- ", result_ranks)
 
-    with open("all_links.json", "r", encoding="utf-8") as f:
+    with open("files/all_links.json", "r", encoding="utf-8") as f:
         links_dict = json.load(f)
 
     result_dict = dict()

@@ -48,7 +48,7 @@ def create_links_dict(all_pages):
                 links_dict[child_link] = n_link
                 n_link += 1
 
-    with open("all_links.json", "w", encoding="utf-8") as f:
+    with open("files/all_links.json", "w", encoding="utf-8") as f:
         json.dump(links_dict, f, indent=4, ensure_ascii=False)
 
 
@@ -59,9 +59,9 @@ def create_sites_matrix():
     """
     all_pages = get_all_pages(os.environ["INDEX_ELASTIC_COLLECTED_DATA"])
 
-    # create_links_dict(all_pages)
+    create_links_dict(all_pages)
 
-    with open("all_links.json", "r", encoding="utf-8") as f:
+    with open("files/all_links.json", "r", encoding="utf-8") as f:
         links_dict = json.load(f)
 
     pages_matrix = np.array([[]])
