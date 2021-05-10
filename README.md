@@ -10,7 +10,7 @@
 ```bash
 $ git clone https://github.com/denysgerasymuk799/Ucuddle-Fast-PageRank.git
 $ cd Ucuddle-Fast-PageRank
-$ pip install -r requirements.txt
+$ sudo pip3 install -r requirements.txt
 $ python3 pagerank_preview.py
 ```
 Results will be available in `files/result_domain_ranks.json`.
