@@ -1,19 +1,13 @@
-import os
-import json
+from src.utils import reduce_to_domain
+
 import numpy as np
+import json
 
-from elasticsearch import Elasticsearch
-from pprint import pprint
-
-from utils import reduce_to_domain
-
-es = Elasticsearch([os.environ['ELASTICSEARCH_URL']],
-                    http_auth=(os.environ['USERNAME'], os.environ['PASSWORD']))
 
 MIN_LINK_LEN = 11
 
 
-def get_all_pages(index_name):
+def get_all_pages(index_name, es):
     # TODO: Note the size param, which increases the hits displayed from the default (10) to 1000 per shard
     res = es.search(index=index_name, body={
         "query": {
@@ -48,20 +42,17 @@ def create_links_dict(all_pages):
                 links_dict[child_link] = n_link
                 n_link += 1
 
-    with open("files/all_links.json", "w", encoding="utf-8") as f:
+    with open("../files/all_links.json", "w", encoding="utf-8") as f:
         json.dump(links_dict, f, indent=4, ensure_ascii=False)
 
 
-def create_sites_matrix():
+def create_sites_matrix(all_pages):
     """
-
     Create numpy matrix of edges among domain-nodes
     """
-    all_pages = get_all_pages(os.environ["INDEX_ELASTIC_COLLECTED_DATA"])
-
     create_links_dict(all_pages)
 
-    with open("files/all_links.json", "r", encoding="utf-8") as f:
+    with open("../files/all_links.json", "r", encoding="utf-8") as f:
         links_dict = json.load(f)
 
     pages_matrix = np.array([[]])
@@ -83,12 +74,4 @@ def create_sites_matrix():
                 if n_page != links_dict[child_link]:
                     pages_matrix = np.append(pages_matrix, [[n_page, links_dict[child_link]]], axis=0)
 
-    # for i in range(len(pages_matrix)):
-    #     print(pages_matrix[i])
     return pages_matrix, len(links_dict)
-
-
-if __name__ == '__main__':
-    all_pages = get_all_pages(os.environ["INDEX_ELASTIC_COLLECTED_DATA"])
-    create_links_dict(all_pages)
-    # create_sites_matrix()

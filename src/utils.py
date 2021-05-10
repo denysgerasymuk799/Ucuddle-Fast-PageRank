@@ -6,7 +6,6 @@ def find_nth_character(find_char, string, num_occurrences):
 
             if num_occurrences == 0:
                 return i
-
     return -1
 
 
@@ -14,5 +13,4 @@ def reduce_to_domain(link):
     end_substring_pos = find_nth_character("/", link, 3)
     if end_substring_pos != -1:
         link = link[:end_substring_pos]
-
     return link
