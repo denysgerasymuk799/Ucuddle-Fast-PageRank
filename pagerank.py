@@ -1,4 +1,5 @@
 import json
+import os
 
 import numpy as np
 import scipy.sparse as sparse
@@ -87,6 +88,7 @@ def pagerank_power(a, prob=STANDARD_RW_PROB, max_iter=MAX_ITER_NUM, tol=DELIMITE
 if __name__ == '__main__':
     edges_, matrix_dim = create_sites_matrix()
     print("edges created")
+    print("edges -- ", edges_)
 
     len_edges = len(edges_)
     weights_ = [1 / len_edges for _ in range(len_edges)]
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     result_ranks = pagerank_power(sls)
     print("Result ranks of sites -- ", result_ranks)
 
-    with open("files/all_links.json", "r", encoding="utf-8") as f:
+    with open(os.path.join("files", "all_links.json"), "r", encoding="utf-8") as f:
         links_dict = json.load(f)
 
     result_dict = dict()
