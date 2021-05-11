@@ -6,3 +6,4 @@ urllib3==1.26.4
 pandas~=1.2.4
 networkx~=2.5.1
 python-igraph~=0.9.1
+matplotlib~=3.3.4

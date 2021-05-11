@@ -17,7 +17,6 @@ def parallel_get_pages(args):
     n_requests, from_id, step, index_name, es = args
     all_sites_arr = []
     for _ in range(n_requests):
-        # TODO: Note the size param, which increases the hits displayed from the default (10) to 1000 per shard
         waiting_response_time = 0
         for i in range(5):
             time.sleep(waiting_response_time)
@@ -38,7 +37,6 @@ def parallel_get_pages(args):
                     request_timeout=1000
                 )
                 print("Got %d Hits" % len(res['hits']['hits']))
-                # all_sites_arr = np.append(all_sites_arr, res['hits']['hits'])
 
                 for site in res['hits']['hits']:
                     all_sites_arr.append({
@@ -54,9 +52,6 @@ def parallel_get_pages(args):
 
         from_id += step
         time.sleep(10)
-
-        # with mutex:
-        #     all_sites_arr = np.append(all_sites_arr, res['hits']['hits'], axis=0)
 
     return all_sites_arr
 
@@ -93,7 +88,6 @@ def create_links_dict(all_pages):
     n_link = 0
     for j in range(N_PROCESSES):
         for n_site, site in enumerate(all_pages[j]):
-            # link = site["_source"]["link"]
             link = site["link"]
             link = reduce_to_domain(link)
 
@@ -154,15 +148,3 @@ def create_sites_matrix(all_pages):
                         pages_matrix = np.append(pages_matrix, [[n_page, links_dict[child_link]]], axis=0)
 
     return pages_matrix, len(links_dict)
-
-
-if __name__ == '__main__':
-    # all_pages = get_all_pages(os.environ["INDEX_ELASTIC_COLLECTED_DATA"])
-    # create_links_dict(all_pages)
-    # create_sites_matrix()
-
-    result = get_all_pages("production_data1")
-    print(result)
-    print(len(result))
-
-    create_links_dict(result)
