@@ -5,3 +5,4 @@ venv
 *.json
 
 files/*.json
+files/*.txt

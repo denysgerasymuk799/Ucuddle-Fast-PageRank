@@ -13,17 +13,21 @@ from elasticsearch.exceptions import TransportError
 
 from utils import reduce_to_domain
 
-es = Elasticsearch([os.environ['ELASTICSEARCH_URL']],
-                   http_auth=(os.environ['Username'], os.environ['Password']))
+# es = Elasticsearch([os.environ['ELASTICSEARCH_URL']],
+#                    http_auth=(os.environ['Username'], os.environ['Password']))
+
+es = Elasticsearch(["http://77.120.203.142:9200"],
+                   http_auth=("ucuddle", "ucuddleCloud123)"))
 
 MIN_LINK_LEN = 11
-N_PROCESSES = int(os.environ["N_PROCESSES"])
+# N_PROCESSES = int(os.environ["N_PROCESSES"])
+N_PROCESSES = 12
 # mutex = Lock()
 
 
 def parallel_get_pages(args):
     n_requests, from_id, step, index_name = args
-    all_sites_arr = np.array([])
+    all_sites_arr = []
     for _ in range(n_requests):
         # TODO: Note the size param, which increases the hits displayed from the default (10) to 1000 per shard
         waiting_response_time = 0
@@ -46,7 +50,13 @@ def parallel_get_pages(args):
                     request_timeout=1000
                 )
                 print("Got %d Hits" % len(res['hits']['hits']))
-                all_sites_arr = np.append(all_sites_arr, res['hits']['hits'])
+                # all_sites_arr = np.append(all_sites_arr, res['hits']['hits'])
+
+                for site in res['hits']['hits']:
+                    all_sites_arr.append({
+                        "link": site["_source"]["link"],
+                        "hyperlinks": site["_source"]["hyperlinks"]
+                    })
 
                 break
             except TransportError as exc:
@@ -64,8 +74,6 @@ def parallel_get_pages(args):
 
 
 def get_all_pages(index_name):
-    all_sites_arr = np.array([])
-
     step = int(os.environ["N_TAKEN_SITES_PER_REQUEST"])
     n_requests = int(os.environ["N_REQUESTS"])
 
@@ -84,14 +92,9 @@ def get_all_pages(index_name):
         processes_data.append([requests_per_process[i], from_id, step, index_name])
         from_id += requests_per_process[i] * step
 
-    # processes_data = zip(processes_data[:])
     print("processes_data -- ", processes_data)
     with Pool(n_processes) as pool:
         all_sites_arr = pool.map(parallel_get_pages, processes_data)
-
-    # print("result -- ", results)
-    # for result in results:
-    #
 
     return all_sites_arr
 
@@ -102,17 +105,18 @@ def create_links_dict(all_pages):
     n_link = 0
     for j in range(N_PROCESSES):
         for n_site, site in enumerate(all_pages[j]):
-            link = site["_source"]["link"]
+            # link = site["_source"]["link"]
+            link = site["link"]
             link = reduce_to_domain(link)
 
             if len(link) >= MIN_LINK_LEN and links_dict.get(link, -1) == -1:
                 links_dict[link] = n_link
                 n_link += 1
 
-            if site["_source"]["hyperlinks"] is None:
+            if site["hyperlinks"] is None:
                 continue
 
-            for child_link in site["_source"]["hyperlinks"]:
+            for child_link in site["hyperlinks"]:
                 child_link = reduce_to_domain(child_link)
 
                 if len(child_link) >= MIN_LINK_LEN and links_dict.get(child_link, -1) == -1:
@@ -129,6 +133,7 @@ def create_sites_matrix():
     Create numpy matrix of edges among domain-nodes
     """
     all_pages = get_all_pages(os.environ["INDEX_ELASTIC_COLLECTED_DATA"])
+    print("\n\n !!! all_pages created")
 
     # print("all_pages -- ", all_pages)
     # for i, site in enumerate(all_pages):
@@ -146,13 +151,13 @@ def create_sites_matrix():
     pages_matrix = np.array([[]])
     for j in range(N_PROCESSES):
         for i, page in enumerate(all_pages[j]):
-            link = reduce_to_domain(page["_source"]["link"])
+            link = reduce_to_domain(page["link"])
             if len(link) < MIN_LINK_LEN:
                 continue
 
             n_page = links_dict[link]
 
-            for j, child_link in enumerate(page["_source"]["hyperlinks"]):
+            for j, child_link in enumerate(page["hyperlinks"]):
                 child_link = reduce_to_domain(child_link)
                 if len(child_link) < MIN_LINK_LEN:
                     continue

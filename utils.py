@@ -15,4 +15,7 @@ def reduce_to_domain(link):
     if end_substring_pos != -1:
         link = link[:end_substring_pos]
 
+    if link[:12] == "https://www.":
+        link = "https://" + link[12:]
+
     return link.lower()
