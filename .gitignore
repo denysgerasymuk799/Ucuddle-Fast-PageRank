@@ -3,6 +3,9 @@ __pycache__
 venv
 *.env
 *.json
+.ipynb_checkpoints
 
 files/*.json
 files/*.txt
+backups
+jupyter_notebooks/.ipynb_checkpoints
