@@ -4,8 +4,7 @@ venv
 *.env
 *.json
 .ipynb_checkpoints
+!files/sample_data.json
 
-files/*.json
-files/*.txt
 backups
 jupyter_notebooks/.ipynb_checkpoints
