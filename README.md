@@ -6,7 +6,7 @@
 It is important to run next scripts from root directory!
 
 1. You can use our data or make sure that everything works - run pagerank_preview.py two times
-   with different flag PERSONALIZATION_MODE = True and after PERSONALIZATION_MODE = True, 
+   with different flag PERSONALIZATION_MODE = True and after PERSONALIZATION_MODE = False, 
    which is placed at the beginning of the file. Such you will get personalized_result_domain_ranks.json and result_domain_ranks.json, 
    which we use for testing correctness of personalization.
    
