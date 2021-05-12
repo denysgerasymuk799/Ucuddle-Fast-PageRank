@@ -3,3 +3,8 @@ elasticsearch==7.12.1
 numpy==1.16.6
 scipy==1.5.4
 urllib3==1.26.4
+pandas~=1.2.4
+networkx~=2.5.1
+python-igraph~=0.9.1
+matplotlib~=3.3.4
+plotly~=4.14.3

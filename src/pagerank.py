@@ -1,9 +1,9 @@
 import numpy as np
 import scipy.sparse as sparse
 
-
 ROWS = 1
 ROW_FORM = -1
+
 STANDARD_RW_PROB = 0.85
 MAX_ITER_NUM = 500
 DELIMITER = 1e-06
@@ -23,7 +23,6 @@ def sparse_matrix(weights, edges, node_num):
 def diagonal_outdegree_matrix(a, dim):
     """
     Calculate diagonal out-degree matrix D.
-
     :param a: (scipy.sparse.csr.csr_matrix) a csr graph (sparse matrix)
     :param dim: (int) - dimension of a matrix
     :return: (scipy.sparse.csr.csr_matrix) - D,
@@ -43,7 +42,6 @@ def diagonal_outdegree_matrix(a, dim):
 def pagerank_power(a, prob=STANDARD_RW_PROB, max_iter=MAX_ITER_NUM, tol=DELIMITER, personalize=None):
     """
     Calculate PageRank given a CSR Graph.
-
     :param a: (scipy.sparse.csr.csr_matrix) a csr graph (sparse matrix)
     :param prob: (float) - probability that random walker follows the link
     :param max_iter: (int) - max number of iterations
