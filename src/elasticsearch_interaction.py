@@ -14,6 +14,11 @@ N_PROCESSES = 1
 
 
 def parallel_get_pages(args):
+    """
+    Send request to Elasticsearch to get package of size "step",
+    make it n_requests times. As we want to get more than 100 thousands websites
+    from our database, so we should ask many times Elasticsearch to send data via REST API
+    """
     n_requests, from_id, step, index_name, es = args
     all_sites_arr = []
     for _ in range(n_requests):
@@ -57,6 +62,9 @@ def parallel_get_pages(args):
 
 
 def get_all_pages(index_name, es):
+    """
+    Get all webpages saved in Elasticsearch
+    """
     step = int(os.environ["N_TAKEN_SITES_PER_REQUEST"])
     n_requests = int(os.environ["N_REQUESTS"])
 
@@ -83,6 +91,10 @@ def get_all_pages(index_name, es):
 
 
 def create_links_dict(all_pages):
+    """
+    Save all domains in json and set to each domain special id
+    to reduce memory usage
+    """
     links_dict = dict()
 
     n_link = 0
@@ -111,15 +123,8 @@ def create_links_dict(all_pages):
 
 def create_sites_matrix(all_pages):
     """
-
     Create numpy matrix of edges among domain-nodes
     """
-    # print("all_pages -- ", all_pages)
-    # for i, site in enumerate(all_pages):
-    #     print(site["_source"]["link"])
-    #     print(site["_source"]["hyperlinks"])
-    #     print("\n\n\n")
-
     answer = input("Do you want to overwrite 'all_links.json' ? -- ")
     if answer == "yes":
         create_links_dict(all_pages)

@@ -9,7 +9,7 @@ import os
 
 
 PREVIEW_MODE = True
-PERSONALIZATION_MODE = True
+PERSONALIZATION_MODE = False
 ENCODING = "utf-8"
 SAMPLE_DATA = os.path.join("files", "sample_data.json")
 RESULTS_PATH = os.path.join("files", "result_domain_ranks.json")
@@ -30,6 +30,7 @@ def get_pers_vector(personalization):
     pers_indicies = []
     for n_domain, domain in enumerate(links_dict):
         domain = domain[8:]
+
         # check if this domain is personalizable
         for pers_subdomain in personalization:
             if pers_subdomain in domain:

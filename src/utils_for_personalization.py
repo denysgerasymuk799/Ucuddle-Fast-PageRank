@@ -8,6 +8,10 @@ import numpy as np
 
 
 def create_links_dict_for_personalization(all_pages):
+    """
+    Save all domains in json and set to each domain special id
+    to reduce memory usage
+    """
     links_dict = dict()
 
     n_link = 0
