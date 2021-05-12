@@ -23,8 +23,11 @@
 on the same data. This idea we have found in this [repo](https://github.com/asajadi/fast-pagerank) . The author proposed 
   good way of testing on random graphs, time measuring and found out the best libraries in python, which can calculate Pagerank
   
-- Comparing calculated values for the same domains with our Fast Pagerank and other libraries [value comparison](media/value_comparison.png)
 
-- Comparing ranks for the same domains [rank comparison](media/ranks_comparison.png)
+- Comparing calculated values for the same domains with our Fast Pagerank and other libraries ![value comparison](media/value_comparison.png)
+
+
+- Comparing ranks for the same domains ![rank comparison](media/ranks_comparison.png)
+
   
-- Comparing speed for the same domains [speed comparison](media/speed_comparison.png)
+- Comparing speed for the same domains ![speed comparison](media/speed_comparison.png)
